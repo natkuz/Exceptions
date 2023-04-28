@@ -53,46 +53,61 @@ public class task {
         if (checkCount(data) == -1) System.out.println("Less data entered than expected");
         else if (checkCount(data) == -2) System.out.println("Too much, added something extra");
         else if (checkCount(data) == 6) {
-            String gender = "<" + gender(dataIn) + ">";
-            dataIn.remove(gender(dataIn));
-            String phone = "<" + phone(dataIn) + ">";
-            dataIn.remove(phone(dataIn));
-            String date = "<" + date(dataIn) + ">";
-            dataIn.remove(date(dataIn));
-            String surname = "<" + surname(dataIn) + ">";
-            String fileName = surname(dataIn);
-            dataIn.remove(surname(dataIn));
-            String name = "<" + name(dataIn) + ">";
-            dataIn.remove(name(dataIn));
-            String patronymic = "<" + patronymic(dataIn) + ">";
-            dataIn.remove(patronymic(dataIn));
 
-            File f = new File(fileName);
-            if (!f.exists())
-                try {
-                    f.createNewFile();
-                } catch (IOException e) {
-                    System.out.println("IOException: " + e.getMessage());
-                }
-            
-            FileWriter fr = null;
             try {
-                fr = new FileWriter(fileName,true);
-                fr.write(surname);
-                fr.write(name);
-                fr.write(patronymic);
-                fr.write(date);
-                fr.write(phone);
-                fr.write(gender);
-                fr.write("\n");
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally{
+                String gender = "<" + gender(dataIn) + ">";
+                dataIn.remove(gender(dataIn));
+                String phone = "<" + phone(dataIn) + ">";
+                dataIn.remove(phone(dataIn));
+                String date = "<" + date(dataIn) + ">";
+                dataIn.remove(date(dataIn));
+                String surname = "<" + surname(dataIn) + ">";
+                String fileName = surname(dataIn);
+                dataIn.remove(surname(dataIn));
+                String name = "<" + name(dataIn) + ">";
+                dataIn.remove(name(dataIn));
+                String patronymic = "<" + patronymic(dataIn) + ">";
+                dataIn.remove(patronymic(dataIn));
+
+                File f = new File(fileName);
+                if (!f.exists())
+                    try {
+                        f.createNewFile();
+                    } catch (IOException e) {
+                        System.out.println("IOException: " + e.getMessage());
+                    }
+            
+                FileWriter fr = null;
                 try {
-                    fr.close();
+                    fr = new FileWriter(fileName,true);
+                    fr.write(surname);
+                    fr.write(name);
+                    fr.write(patronymic);
+                    fr.write(date);
+                    fr.write(phone);
+                    fr.write(gender);
+                    fr.write("\n");
                 } catch (IOException e) {
                     e.printStackTrace();
+                } finally{
+                    try {
+                        fr.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
+            } catch (GenderException e) {
+                System.out.println(e.getMessage());
+            } catch (PhoneException e) {
+                System.out.println(e.getMessage());
+            } catch (DateException e) {
+                System.out.println(e.getMessage());
+            } catch (SurnameException e) {
+                System.out.println(e.getMessage());
+            } catch (NameException e) {
+                System.out.println(e.getMessage());
+            } catch (PatronymicException e) {
+                System.out.println(e.getMessage());
             }
         }
     }
@@ -112,7 +127,7 @@ public class task {
                 return gender;
             } 
         }
-        throw new RuntimeException("Invalid gender");
+        throw new GenderException();
     }
         
     public static String phone(ArrayList<String> arr) {
@@ -123,7 +138,7 @@ public class task {
                 return phone;
             }
         }
-        throw new RuntimeException("Invalid phone number, only numbers needed");
+        throw new PhoneException();
     }
 
     public static String date(ArrayList<String> arr) {
@@ -134,7 +149,7 @@ public class task {
                 return date;
             }
         }
-        throw new RuntimeException("Invalid date format");
+        throw new DateException();
     }
     
     public static String surname(ArrayList<String> arr) {
@@ -145,7 +160,7 @@ public class task {
                 return surname;
             }
         }
-        throw new RuntimeException("Last name must contain only latin characters");
+        throw new SurnameException();
     }
 
     public static String name(ArrayList<String> arr) {
@@ -156,7 +171,7 @@ public class task {
                 return name;
             }
         }
-        throw new RuntimeException("The name must contain only latin characters");
+        throw new NameException();
     }
 
     public static String patronymic(ArrayList<String> arr) {
@@ -167,6 +182,6 @@ public class task {
                 return patronymic;
             }
         }
-        throw new RuntimeException("Patronymic must contain only Latin characters");
+        throw new PatronymicException();
     }
 }
