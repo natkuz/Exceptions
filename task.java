@@ -68,9 +68,7 @@ public class task {
                         System.out.println("IOException: " + e.getMessage());
                     }
             
-                FileWriter fr = null;
-                try {
-                    fr = new FileWriter(surname,true);
+                try (FileWriter fr = new FileWriter(fileName,true)) {
                     fr.write(surname);
                     fr.write(name);
                     fr.write(patronymic);
@@ -80,12 +78,6 @@ public class task {
                     fr.write("\n");
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
-                } finally{
-                    try {
-                        fr.close();
-                    } catch (NullPointerException e) {
-                        e.printStackTrace();
-                    }
                 }
             } catch (GenderException e) {
                 System.out.println(e.getMessage());
